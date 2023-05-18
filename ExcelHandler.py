@@ -2,6 +2,7 @@ import pandas as pd
 
 from Question import Question
 
+
 class ExcelHandler:
 
     def __init__(self, path):
@@ -27,8 +28,17 @@ class ExcelHandler:
 
         return questions
 
+    def read_tough_drinks(self):
+        alchohols = []
 
-    def read_drinks(self):
+        alko_excel_data = pd.read_excel(self.path, sheet_name="alko")
+
+        for index, row in alko_excel_data.iterrows():
+            alchohols.append(row[0])
+
+        return alchohols
+
+    def read_soft_drinks(self):
         alchohols = []
 
         alko_excel_data = pd.read_excel(self.path, sheet_name="alko")
