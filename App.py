@@ -72,24 +72,42 @@ class App(Tk):
             self.img = ImageTk.PhotoImage(self.img)
             Label(top, image=self.img, bg="#000000").pack()
 
-    def select_user(self):
+    def show_fuckdethele(self, id):
+        self.select_top.destroy()
+        self.set_window_by_name("quiz")
         top = Toplevel(self)
-        top.title("Hvem er svag?")
-        top.geometry("500x500")
+        top.title("MaltMadness")
+        top.geometry("300x600")
         top.configure(bg="#000000")
-        Label(top, text="Hvem er svag?", bg="#000000", fg="#ffffff", font=("Arial", 18), wraplength=280).pack()
+
+        self.img = Image.open("img/wordart.png")
+        self.img = self.img.resize((300, 50), Image.ANTIALIAS)
+        self.img = ImageTk.PhotoImage(self.img)
+        Label(top, image=self.img, bg="#000000").pack()
+
+        self.img2 = Image.open("img/sodLilFatter.png")
+        self.img2 = self.img2.resize((300, 200), Image.ANTIALIAS)
+        self.img2 = ImageTk.PhotoImage(self.img2)
+        Label(top, image=self.img2, bg="#000000").pack()
+
+        text = choice(self.excel_handler.read_player_disses(id))
+
+        Label(top, text=text, bg="#000000", fg="#ffffff", font=("Arial", 18), wraplength=280).pack()
+
+    def select_user(self):
+        self.select_top = Toplevel(self)
+        self.select_top.title("Hvem er svag?")
+        self.select_top.geometry("500x500")
+        self.select_top.configure(bg="#000000")
+        Label(self.select_top, text="Hvem er svag?", bg="#000000", fg="#ffffff", font=("Arial", 18), wraplength=280).pack()
 
         players = self.excel_handler.read_players()
 
         print(players)
 
         for player in players:
-            Button(top, text=player.name, command=lambda: self.show_toplevel(
-                text=choice(self.excel_handler.read_player_disses(player.id))
-            )).pack()
 
-
-
+            Button(self.select_top, text=player.name, command=lambda player=player: self.show_fuckdethele(player.id)).pack()
 
 
 
