@@ -12,6 +12,3 @@ class App(tkinter.Tk):
             bg="#000000"
         )
         self.mainloop()
-
-
-

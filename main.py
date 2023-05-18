@@ -1,4 +1,4 @@
-from guishit import App
+from App import App
 
 
 def main():
