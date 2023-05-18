@@ -1,5 +1,19 @@
+from Question import Question
 from tkinter import *
+from random import shuffle
 
+QUESTIONS = [
+    {
+        "prompt": "What is 1 + 1?",
+        "options": ["1", "2", "3", "4"],
+        "correct_index": 1
+    },
+    {
+        "prompt": "What is 2 + 2?",
+        "options": ["1", "2", "3", "4"],
+        "correct_index": 3
+    },
+]
 
 class App(Tk):
     def __init__(self):
@@ -28,7 +42,7 @@ class App(Tk):
         self.set_window(self.current_window)
 
     def setup_windows(self):
-        self.windows["quiz"] = QuizWindow(self, "Hvem?", ["Jeg", "Du", "Han", "Hun"], 0)
+        self.windows["quiz"] = QuizWindow(self, questions=Question.from_2d_list(QUESTIONS))
         self.set_window_by_name("quiz")
 
 
@@ -39,27 +53,47 @@ class Window(Frame):
 
 
 class QuizWindow(Window):
-    def __init__(self, parent, question: str, options: list[str], correct_index: int):
+    def __init__(self, parent, questions: list[Question]):
         super().__init__(parent)
-        self.question = question
-        self.options = options
-        self.correct_index = correct_index
-        self.prompt = Label(self, text=question, bg="#000000", fg="#ffffff", font=("Arial", 12))
-        self.option_buttons = []
+        self.questions = questions
+        shuffle(self.questions)
 
+        self.current_question_index = 0
+        self.current_question = self.questions[self.current_question_index]
+
+        self.option_buttons = []
         self.configure(bg="#000000")
+
+        self.prompt = Label(self, text="", bg="#000000", fg="#ffffff", font=("Arial", 16))
         self.setup()
 
     def setup(self):
         self.prompt.configure(
-            text=self.question,
             anchor="center",
             justify="center",
         )
         self.prompt.place(x=0, y=0, width=1248, height=100)
         for i in range(4):
-            self.option_buttons.append(OptionButton(self, self.options[i], None))
-            self.option_buttons[i].place(x=100, y=100 + i * 100, width=200, height=50)
+            self.option_buttons.append(OptionButton(self, text="2", command=self.next_question))
+            self.option_buttons[i].place(x=100, y=100 + i * 150, width=300, height=100)
+        self.display_question()
+
+    def display_question(self):
+        self.prompt.configure(text=self.current_question.prompt)
+        for i in range(4):
+            command = None  # TODO: Make this show wrong
+            if i == self.current_question.correct_index:
+                command = self.next_question
+            self.option_buttons[i].configure(text=self.current_question.options[i], command=command)
+
+    def next_question(self):
+        self.current_question_index += 1
+        if self.current_question_index >= len(self.questions):
+            self.parent.set_window_by_name("end")
+            return
+
+        self.current_question = self.questions[self.current_question_index]
+        self.display_question()
 
 
 class OptionButton(Button):
