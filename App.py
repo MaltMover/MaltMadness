@@ -52,7 +52,7 @@ class QuizWindow(Window):
         self.option_buttons = []
         self.configure(bg="#000000")
 
-        self.prompt = Label(self, text="", bg="#000000", fg="#ffffff", font=("Arial", 16))
+        self.prompt = Label(self, text="", bg="#000000", fg="#ffffff", font=("Arial", 30))
         self.setup()
 
     def setup(self):
@@ -62,8 +62,15 @@ class QuizWindow(Window):
         )
         self.prompt.place(x=0, y=0, width=1248, height=100)
         for i in range(4):
-            self.option_buttons.append(OptionButton(self, text="2", command=self.next_question))
-            self.option_buttons[i].place(x=100, y=100 + i * 150, width=300, height=100)
+            self.option_buttons.append(OptionButton(self, text="", command=self.next_question))
+            x = 280 + (400 * (i % 2))
+            y = 150 + (150 * (i // 2))
+            self.option_buttons[i].place(
+                x=x,
+                y=y,
+                width=300,
+                height=100
+            )
         self.display_question()
 
     def display_question(self):
