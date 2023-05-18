@@ -28,7 +28,7 @@ class App(Tk):
         self.set_window(self.current_window)
 
     def setup_windows(self):
-        self.windows["quiz"] = QuizWindow(self)
+        self.windows["quiz"] = QuizWindow(self, "Hvem?", ["Jeg", "Du", "Han", "Hun"], 0)
         self.set_window_by_name("quiz")
 
 
@@ -39,16 +39,26 @@ class Window(Frame):
 
 
 class QuizWindow(Window):
-    def __init__(self, parent):
+    def __init__(self, parent, question: str, options: list[str], correct_index: int):
         super().__init__(parent)
+        self.question = question
+        self.options = options
+        self.correct_index = correct_index
+        self.prompt = Label(self, text=question, bg="#000000", fg="#ffffff", font=("Arial", 12))
         self.option_buttons = []
 
         self.configure(bg="#000000")
         self.setup()
 
     def setup(self):
+        self.prompt.configure(
+            text=self.question,
+            anchor="center",
+            justify="center",
+        )
+        self.prompt.place(x=0, y=0, width=1248, height=100)
         for i in range(4):
-            self.option_buttons.append(OptionButton(self, f"Option {i+1}", None))
+            self.option_buttons.append(OptionButton(self, self.options[i], None))
             self.option_buttons[i].place(x=100, y=100 + i * 100, width=200, height=50)
 
 
