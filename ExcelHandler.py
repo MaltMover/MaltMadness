@@ -1,5 +1,6 @@
 import pandas as pd
 from Question import Question
+from Player import Player
 
 
 class ExcelHandler:
@@ -40,9 +41,40 @@ class ExcelHandler:
     def read_soft_drinks(self):
         alchohols = []
 
-        alko_excel_data = pd.read_excel(self.path, sheet_name="alko")
+        softdrinks_excel_data = pd.read_excel(self.path, sheet_name="alko")
 
-        for index, row in alko_excel_data.iterrows():
+        for index, row in softdrinks_excel_data.iterrows():
             alchohols.append(row[0])
 
         return alchohols
+
+    def read_players(self):
+        players = []
+
+        player_excel_data = pd.read_excel(self.path, sheet_name="players")
+
+        for index, row in player_excel_data.iterrows():
+            player = Player(
+                id=row.index(),
+                name=row[0],
+                age=row[1],
+                networth=[2]
+            )
+
+            players.append(player)
+
+        return players
+
+    def read_player_disses(self, playerID):
+        player_disses = []
+
+        player_excel_data = pd.read_excel(self.path, sheet_name="roasts")
+
+        for index, row in player_excel_data.iterrows():
+            if row[0] == playerID:
+                player_disses.append(row[1])
+
+        return player_disses
+
+
+
