@@ -89,10 +89,6 @@ class App(Tk):
             )).pack()
 
 
-
-
-
-
 class Window(Frame):
     def __init__(self, parent, bg="#000000"):
         super().__init__(parent, bg=bg)
@@ -163,8 +159,6 @@ def closing_popup():
     Button(failed_window, text="Tak skatter <3", command=failed_window.destroy).place(x=50, y=260)
 
 
-
-
 class FailedWindow(Window):
     def __init__(self, parent):
         super().__init__(parent)
@@ -180,7 +174,6 @@ class FailedWindow(Window):
         self.quit_button = OptionButton(self, "Avslutt", closing_popup)
         self.drink_button = Button(self, text="Drikk", image=self.drink_image)
         self.crybaby_button = OptionButton(self, "Jeg er en lille bitch", command=lambda: self.parent.select_user())
-
 
         self.setup()
 
@@ -199,8 +192,10 @@ class FailedWindow(Window):
         self.retry_button.configure(text="Du troede du kunne slippe uden at drikke? Vi er danskere der elsker "
                                          "gruppepres :) DRIK!")
 
+
 def godnat_for_satan():
     playsound.playsound('img/zzz.mp3')
+
 
 def godnat_popup():
     # Failed popup window
