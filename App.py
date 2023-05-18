@@ -24,7 +24,10 @@ class App(Tk):
             window.place_forget()
 
         self.current_window = new_window
-        self.current_window.place(x=0, y=0, width=1248, height=702)
+        if isinstance(self.current_window, QuizWindow):
+            self.current_window.place(x=300, y=0, width=800, height=400)
+        else:
+            self.current_window.place(x=0, y=0, width=1248, height=702)
 
     def set_window_by_name(self, name: str):
         self.set_window(self.windows[name])
@@ -53,7 +56,7 @@ class QuizWindow(Window):
         self.option_buttons = []
         self.configure(bg="#000000")
 
-        self.prompt = Label(self, text="", bg="#000000", fg="#ffffff", font=("Arial", 30))
+        self.prompt = Label(self, text="", bg="#000000", fg="#ffffff", font=("Arial", 20))
         self.setup()
 
     def setup(self):
@@ -61,11 +64,11 @@ class QuizWindow(Window):
             anchor="center",
             justify="center",
         )
-        self.prompt.place(x=0, y=0, width=1248, height=100)
+        self.prompt.place(x=0, y=0, width=800, height=100)
         for i in range(4):
             self.option_buttons.append(OptionButton(self, text="", command=self.next_question))
-            x = 280 + (400 * (i % 2))
-            y = 150 + (150 * (i // 2))
+            x = (400 * (i % 2))
+            y = 100 + (170 * (i // 2))
             self.option_buttons[i].place(
                 x=x,
                 y=y,
