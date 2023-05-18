@@ -34,4 +34,6 @@ class ExcelHandler:
         alko_excel_data = pd.read_excel(self.path, sheet_name="alko")
 
         for index, row in alko_excel_data.iterrows():
-            pass
+            alchohols.append(row[0])
+
+        return alchohols
