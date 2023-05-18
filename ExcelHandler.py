@@ -10,7 +10,6 @@ class ExcelHandler:
 
     def read_questions(self):
         questions = []
-
         excel_data = pd.read_excel(self.path, sheet_name="hva")
 
         for index, row in excel_data.iterrows():
@@ -29,30 +28,27 @@ class ExcelHandler:
         return questions
 
     def read_tough_drinks(self):
-        alchohols = []
+        alco_excel_data = pd.read_excel(self.path, sheet_name="alko")
 
-        alko_excel_data = pd.read_excel(self.path, sheet_name="alko")
+        alcohols = []
+        for index, row in alco_excel_data.iterrows():
+            alcohols.append(row[0])
 
-        for index, row in alko_excel_data.iterrows():
-            alchohols.append(row[0])
-
-        return alchohols
+        return alcohols
 
     def read_soft_drinks(self):
-        alchohols = []
+        softdrink_excel_data = pd.read_excel(self.path, sheet_name="alko")
 
-        softdrinks_excel_data = pd.read_excel(self.path, sheet_name="alko")
+        softdrinks = []
+        for index, row in softdrink_excel_data.iterrows():
+            softdrinks.append(row[0])
 
-        for index, row in softdrinks_excel_data.iterrows():
-            alchohols.append(row[0])
-
-        return alchohols
+        return softdrinks
 
     def read_players(self):
-        players = []
-
         player_excel_data = pd.read_excel(self.path, sheet_name="players")
 
+        players = []
         for index, row in player_excel_data.iterrows():
             player = Player(
                 id=row.index,
@@ -63,14 +59,12 @@ class ExcelHandler:
             )
 
             players.append(player)
-
         return players
 
     def read_player_disses(self, playerID):
-        player_disses = []
-
         player_excel_data = pd.read_excel(self.path, sheet_name="roasts")
 
+        player_disses = []
         for index, row in player_excel_data.iterrows():
             if row[0] == playerID:
                 player_disses.append(row[1])
