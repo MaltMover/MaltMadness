@@ -2,7 +2,7 @@ from Question import Question
 from ExcelHandler import ExcelHandler
 from WebScraper import WebScraper
 from tkinter import *
-from random import shuffle, choice
+from random import shuffle, choice, randint
 from PIL import ImageTk, Image
 import playsound
 
@@ -29,7 +29,7 @@ class App(Tk):
             window.place_forget()
 
         self.current_window = new_window
-        if isinstance(self.current_window, QuizWindow):
+        if isinstance(self.current_window, QuizWindow) or isinstance(self.current_window, DrinkMixer):
             self.current_window.place(x=300, y=0, width=800, height=400)
         else:
             self.current_window.place(x=0, y=0, width=1248, height=702)
@@ -39,6 +39,7 @@ class App(Tk):
 
     def setup(self):
         self.windows["quiz"] = QuizWindow(self, questions=self.excel_handler.read_questions())
+        self.windows["drinks"] = DrinkMixer(self)
         self.windows["failed"] = FailedWindow(self)
         self.windows["won"] = WonWindow(self)
         self.set_window_by_name("quiz")
@@ -47,18 +48,31 @@ class App(Tk):
 
     def setup_random_features(self):
         self.scraper.get_github_issues()
-        self.bob_image = Image.open("img/byggemand.png")
-        self.bob_image = self.bob_image.resize((200, 200), Image.ANTIALIAS)
-        self.bob_image = ImageTk.PhotoImage(self.bob_image)
+        self.byggemand = Image.open("img/byggemand.png")
+        self.byggemand = self.byggemand.resize((200, 200), Image.ANTIALIAS)
+        self.byggemand = ImageTk.PhotoImage(self.byggemand)
 
         self.feature_buttons["github"] = Button(
             self,
-            image=self.bob_image,
+            image=self.byggemand,
             command=lambda: self.show_toplevel(choice(self.scraper.github_issues), img="img/byggemand.png"),
             bg="#000000",
             borderwidth=0,
         )
         self.feature_buttons["github"].place(x=25, y=100, width=200, height=200)
+
+        self.drink_image = Image.open("img/drinks.png")
+        self.drink_image = self.drink_image.resize((200, 200), Image.ANTIALIAS)
+        self.drink_image = ImageTk.PhotoImage(self.drink_image)
+
+        self.feature_buttons["drinks"] = Button(
+            self,
+            image=self.drink_image,
+            command=lambda: self.set_window_by_name("drinks"),
+            bg="#000000",
+            borderwidth=0,
+        )
+        self.feature_buttons["drinks"].place(x=200, y=500, width=200, height=200)
 
     def show_toplevel(self, text, img=None):
         top = Toplevel(self)
@@ -92,7 +106,7 @@ class App(Tk):
 
         text = choice(self.excel_handler.read_player_disses(id))
 
-        Label(top, text=text, bg="#000000", fg="#ffffff", font=("Arial", 18), wraplength=280).pack()
+        Label(top, text=text, bg="#000000", fg="#ffffff", font=("Arial", 18), wraplength=280, ).pack()
 
     def select_user(self):
         self.select_top = Toplevel(self)
@@ -102,13 +116,9 @@ class App(Tk):
         Label(self.select_top, text="Hvem er svag?", bg="#000000", fg="#ffffff", font=("Arial", 18), wraplength=280).pack()
 
         players = self.excel_handler.read_players()
-
-        print(players)
-
         for player in players:
-
-            Button(self.select_top, text=player.name, command=lambda player=player: self.show_fuckdethele(player.id)).pack()
-
+            Button(self.select_top, text=player.name, command=lambda player=player: self.show_fuckdethele(player.id), bg="#a85832", borderwidth=3,
+                   height=4, width=50, padx=2, pady=2).pack()
 
 
 class Window(Frame):
@@ -168,6 +178,70 @@ class QuizWindow(Window):
         self.display_question()
 
 
+class DrinkMixer(Window):
+    def __init__(self, parent):
+        super().__init__(parent)
+        self.soft_drinks = self.parent.excel_handler.read_soft_drinks()
+        self.alcoholic_drinks = self.parent.excel_handler.read_tough_drinks()
+        self.ingredient_labels = []
+        self.done_button = None
+
+        self.configure(bg="#000000")
+        self.setup()
+
+    def setup(self):
+        Label(self, text="DRIKKETID", bg="#000000", fg="#FFFFFF", font=("Arial", 22)).place(x=0, y=0, width=800, height=100)
+        Button(
+            self,
+            text="LAV DRINK",
+            command=self.show_drink,
+            bg="#990280",
+            fg="#FFFFFF",
+            font=("Arial", 20),
+            borderwidth=0,
+        ).place(x=0, y=100, width=800, height=100)
+        self.done_button = Button(
+            self,
+            text="moaar jeg færdig",
+            command=self.close,
+            bg="#990280",
+            fg="#FFFFFF",
+            font=("Arial", 20),
+            borderwidth=0,
+        )
+
+    def show_drink(self):
+        for l in self.ingredient_labels:
+            l.destroy()
+        self.done_button.place(x=0, y=100, width=800, height=100)
+        self.ingredient_labels = []
+        soft_drink_count = randint(1, 2)
+        alcoholic_drink_count = randint(1, 2)
+        ingredients = [choice(self.soft_drinks) for _ in range(soft_drink_count)] + \
+                      [choice(self.alcoholic_drinks) for _ in range(alcoholic_drink_count)]
+
+        max_amount = 300
+        amounts = []
+        for _ in range(len(ingredients)):
+            amount = randint(0, max_amount)
+            amounts.append(amount)
+            max_amount -= amount
+
+        for ingredient, amount in zip(ingredients, amounts):
+            self.ingredient_labels.append(
+                Label(self, text=f"{ingredient} {amount} ml", bg="#000000", fg="#FFFFFF", font=("Arial", 18))
+            )
+
+        for i, l in enumerate(self.ingredient_labels):
+            l.place(x=0, y=200 + (i * 50), width=800, height=50)
+
+    def close(self):
+        for l in self.ingredient_labels:
+            l.destroy()
+        self.done_button.place_forget()
+        self.parent.set_window_by_name("quiz")
+
+
 def closing_popup():
     # Failed popup window
     failed_window = Tk()
@@ -179,8 +253,6 @@ def closing_popup():
     Label(failed_window, text="Fordi her. Elsker. Vi. At Hygge. :)", font=('Oswald 12 bold')).place(x=0, y=180)
     Label(failed_window, text="Du skal spille vidre, slayyyyyyy", font=('Arial 12')).place(x=30, y=220)
     Button(failed_window, text="Tak skatter <3", command=failed_window.destroy).place(x=50, y=260)
-
-
 
 
 class FailedWindow(Window):
@@ -196,9 +268,8 @@ class FailedWindow(Window):
                                   font=("Comic Sans MS", 36))
         self.retry_button = OptionButton(self, "Prøv igjen", self.hehe_you_thought_lmao)
         self.quit_button = OptionButton(self, "Avslutt", closing_popup)
-        self.drink_button = Button(self, text="Drikk", image=self.drink_image)
+        self.drink_button = Button(self, text="Drikk", image=self.drink_image, command=lambda: self.parent.set_window_by_name("drinks"))
         self.crybaby_button = OptionButton(self, "Jeg er en lille bitch", command=lambda: self.parent.select_user())
-
 
         self.setup()
 
@@ -217,8 +288,10 @@ class FailedWindow(Window):
         self.retry_button.configure(text="Du troede du kunne slippe uden at drikke? Vi er danskere der elsker "
                                          "gruppepres :) DRIK!")
 
+
 def godnat_for_satan():
     playsound.playsound('img/zzz.mp3')
+
 
 def godnat_popup():
     # Failed popup window
