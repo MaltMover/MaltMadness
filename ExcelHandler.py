@@ -5,9 +5,8 @@ from Player import Player
 
 class ExcelHandler:
 
-    def __init__(self, path, playerID):
+    def __init__(self, path):
         self.path = path
-        self.playerID = playerID
 
     def read_questions(self):
         questions = []
@@ -66,13 +65,16 @@ class ExcelHandler:
 
         return players
 
-    def read_player_Disses(self):
+    def read_player_disses(self, playerID):
         player_disses = []
 
         player_excel_data = pd.read_excel(self.path, sheet_name="roasts")
 
         for index, row in player_excel_data.iterrows():
-            if row[0] == self.playerID:
+            if row[0] == playerID:
                 player_disses.append(row[1])
 
         return player_disses
+
+
+
