@@ -15,6 +15,7 @@ QUESTIONS = [
     },
 ]
 
+
 class App(Tk):
     def __init__(self):
         super().__init__()
@@ -28,20 +29,19 @@ class App(Tk):
             bg="#000000"
         )
 
-    def set_window(self, window):
+    def set_window(self, new_window):
         for window in self.windows.values():
             window.place_forget()
 
-        self.current_window = window
+        print(new_window)
+        self.current_window = new_window
         self.current_window.place(x=0, y=0, width=1248, height=702)
 
     def set_window_by_name(self, name: str):
-        self.current_window = self.windows.get(name, None)
-        if self.current_window is None:
-            raise ValueError(f"Window with name {name} does not exist")
-        self.set_window(self.current_window)
+        self.set_window(self.windows[name])
 
     def setup_windows(self):
+        self.windows["failed"] = FailedWindow(self)
         self.windows["quiz"] = QuizWindow(self, questions=Question.from_2d_list(QUESTIONS))
         self.set_window_by_name("quiz")
 
@@ -81,7 +81,7 @@ class QuizWindow(Window):
     def display_question(self):
         self.prompt.configure(text=self.current_question.prompt)
         for i in range(4):
-            command = None  # TODO: Make this show wrong
+            command = lambda: self.parent.set_window_by_name("failed")
             if i == self.current_question.correct_index:
                 command = self.next_question
             self.option_buttons[i].configure(text=self.current_question.options[i], command=command)
