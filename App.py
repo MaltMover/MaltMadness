@@ -2,6 +2,7 @@ from Question import Question
 from ExcelHandler import ExcelHandler
 from tkinter import *
 from random import shuffle
+from PIL import ImageTk, Image
 
 
 class App(Tk):
@@ -107,13 +108,16 @@ def closing_popup():
 class FailedWindow(Window):
     def __init__(self, parent):
         super().__init__(parent)
-        self.configure(bg="#000000")
+        self.configure(bg="#341265")
+        self.drink_image = Image.open("img/DrikForSatan.png")
+        self.drink_image = self.drink_image.resize((1000, 200), Image.ANTIALIAS)
+        self.drink_image = ImageTk.PhotoImage(self.drink_image)
 
         self.failed_label = Label(self, text="Du er så dum, men det er okay <3", bg="#000000", fg="#ffffff",
-                                  font=("Oswald", 36))
-        self.retry_button = OptionButton(self, "Prøv igjen", None)
+                                  font=("Comic Sans MS", 36))
+        self.retry_button = OptionButton(self, "Prøv igjen", self.hehe_you_thought_lmao)
         self.quit_button = OptionButton(self, "Avslutt", closing_popup)
-        self.drink_button = OptionButton(self, "Drikk", None)
+        self.drink_button = Button(self, text="Drikk", image=self.drink_image)
 
         self.setup()
 
@@ -122,15 +126,14 @@ class FailedWindow(Window):
             anchor="center",
             justify="center",
         )
-        self.drink_button.configure(
-            bg="#FFFF00",
-            fg="#ffffff",
-            font=("Arial", 12)
-        )
         self.failed_label.place(x=0, y=0, width=1248, height=100)
         self.drink_button.place(x=100, y=150, width=1000, height=200)
         self.quit_button.place(x=100, y=500, width=893, height=50)
         self.retry_button.place(x=100, y=400, width=900, height=50)
+
+    def hehe_you_thought_lmao(self):
+        self.retry_button.configure(text="Du troede du kunne slippe uden at drikke? Vi er danskere der elsker "
+                                         "gruppepres :) DRIK!")
 
 
 class OptionButton(Button):
