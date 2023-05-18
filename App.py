@@ -140,6 +140,7 @@ class QuizWindow(Window):
         self.configure(bg="#000000")
 
         self.prompt = Label(self, text="", bg="#000000", fg="#ffffff", font=("Arial", 20))
+        self.score_label = Label(self, text="0", bg="#000000", fg="#ffffff", font=("Arial", 18))
         self.setup()
 
     def setup(self):
@@ -158,6 +159,7 @@ class QuizWindow(Window):
                 width=300,
                 height=100
             )
+        self.score_label.place(x=350, y=230)
         self.display_question()
 
     def display_question(self):
@@ -175,6 +177,7 @@ class QuizWindow(Window):
             return
 
         self.current_question = self.questions[self.current_question_index]
+        self.score_label.configure(text=str(self.current_question_index))
         self.display_question()
 
 
