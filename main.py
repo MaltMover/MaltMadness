@@ -1,5 +1,9 @@
+from guishit import App
+
+
 def main():
-    print("Hello World!")
+    app = App()
+    app.mainloop()
 
 
 if __name__ == '__main__':
