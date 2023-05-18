@@ -1,19 +1,7 @@
 from Question import Question
+from ExcelHandler import ExcelHandler
 from tkinter import *
 from random import shuffle
-
-QUESTIONS = [
-    {
-        "prompt": "What is 1 + 1?",
-        "options": ["1", "2", "3", "4"],
-        "correct_index": 1
-    },
-    {
-        "prompt": "What is 2 + 2?",
-        "options": ["1", "2", "3", "4"],
-        "correct_index": 3
-    },
-]
 
 
 class App(Tk):
@@ -25,6 +13,7 @@ class App(Tk):
         self.title("MaltMadness")
         self.geometry("1248x702")
 
+        self.excel_handler = ExcelHandler("slayysaft.xlsx")
         self.configure(
             bg="#000000"
         )
@@ -33,7 +22,6 @@ class App(Tk):
         for window in self.windows.values():
             window.place_forget()
 
-        print(new_window)
         self.current_window = new_window
         self.current_window.place(x=0, y=0, width=1248, height=702)
 
@@ -41,9 +29,9 @@ class App(Tk):
         self.set_window(self.windows[name])
 
     def setup_windows(self):
-        self.windows["failed"] = FailedWindow(self)
-        self.windows["quiz"] = QuizWindow(self, questions=Question.from_2d_list(QUESTIONS))
+        self.windows["quiz"] = QuizWindow(self, questions=self.excel_handler.read_questions())
         self.set_window_by_name("quiz")
+        self.windows["failed"] = FailedWindow(self)
 
 
 class Window(Frame):

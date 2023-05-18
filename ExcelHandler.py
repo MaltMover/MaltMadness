@@ -1,6 +1,6 @@
 import pandas as pd
-
 from Question import Question
+
 
 class ExcelHandler:
 
@@ -26,7 +26,6 @@ class ExcelHandler:
             questions.append(question)
 
         return questions
-
 
     def read_drinks(self):
         alchohols = []
