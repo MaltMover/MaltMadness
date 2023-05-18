@@ -49,14 +49,18 @@ class ExcelHandler:
         player_excel_data = pd.read_excel(self.path, sheet_name="players")
 
         players = []
+
+        index = 0
+
         for index, row in player_excel_data.iterrows():
             player = Player(
-                id=row.index,
+                id=index,
                 name=row[0],
                 age=row[1],
                 sex=row[2],
                 networth=row[3]
             )
+            index+1
 
             players.append(player)
         return players
@@ -66,20 +70,12 @@ class ExcelHandler:
 
         player_disses = []
         for index, row in player_excel_data.iterrows():
-            if row[0] == playerID:
+            if row[0] == int(playerID):
                 player_disses.append(row[1])
 
         return player_disses
 
 
-if __name__ == '__main__':
-    ha = ExcelHandler("slayysaft.xlsx")
-
-    hehe = ha.read_player_disses(0)
-
-    haha = ha.read_players()
-
-    print()
 
 
 
