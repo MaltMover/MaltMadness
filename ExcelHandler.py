@@ -55,10 +55,11 @@ class ExcelHandler:
 
         for index, row in player_excel_data.iterrows():
             player = Player(
-                id=row.index(),
+                id=row.index,
                 name=row[0],
                 age=row[1],
-                networth=[2]
+                sex=row[2],
+                networth=row[3]
             )
 
             players.append(player)
@@ -75,6 +76,16 @@ class ExcelHandler:
                 player_disses.append(row[1])
 
         return player_disses
+
+
+if __name__ == '__main__':
+    ha = ExcelHandler("slayysaft.xlsx")
+
+    hehe = ha.read_player_disses(0)
+
+    haha = ha.read_players()
+
+    print()
 
 
 

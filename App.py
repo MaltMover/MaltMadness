@@ -67,6 +67,26 @@ class App(Tk):
             self.img = ImageTk.PhotoImage(self.img)
             Label(top, image=self.img, bg="#000000").pack()
 
+    def select_user(self):
+        top = Toplevel(self)
+        top.title("Hvem er svag?")
+        top.geometry("500x500")
+        top.configure(bg="#000000")
+        Label(top, text="Hvem er svag?", bg="#000000", fg="#ffffff", font=("Arial", 18), wraplength=280).pack()
+
+        players = self.excel_handler.read_players()
+
+        print(players)
+
+        for player in players:
+            Button(top, text=player.name, command=lambda: self.show_toplevel(
+                text=choice(self.excel_handler.read_player_disses(player.id))
+            )).pack()
+
+
+
+
+
 
 class Window(Frame):
     def __init__(self, parent, bg="#000000"):
@@ -138,9 +158,12 @@ def closing_popup():
     Button(failed_window, text="Tak skatter <3", command=failed_window.destroy).place(x=50, y=260)
 
 
+
+
 class FailedWindow(Window):
     def __init__(self, parent):
         super().__init__(parent)
+        self.parent = parent
         self.configure(bg="#341265")
         self.drink_image = Image.open("img/DrikForSatan.png")
         self.drink_image = self.drink_image.resize((1000, 200), Image.ANTIALIAS)
@@ -151,6 +174,8 @@ class FailedWindow(Window):
         self.retry_button = OptionButton(self, "Prøv igjen", self.hehe_you_thought_lmao)
         self.quit_button = OptionButton(self, "Avslutt", closing_popup)
         self.drink_button = Button(self, text="Drikk", image=self.drink_image)
+        self.crybaby_button = OptionButton(self, "Jeg er en lille bitch", command=lambda: self.parent.select_user())
+
 
         self.setup()
 
@@ -163,6 +188,7 @@ class FailedWindow(Window):
         self.drink_button.place(x=100, y=150, width=1000, height=200)
         self.quit_button.place(x=100, y=500, width=893, height=50)
         self.retry_button.place(x=100, y=400, width=900, height=50)
+        self.crybaby_button.place(x=110, y=600, width=900, height=50)
 
     def hehe_you_thought_lmao(self):
         self.retry_button.configure(text="Du troede du kunne slippe uden at drikke? Vi er danskere der elsker "
