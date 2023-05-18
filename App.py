@@ -1,6 +1,6 @@
 from Question import Question
 from ExcelHandler import ExcelHandler
-from WebScraper import get_github_issues
+from WebScraper import WebScraper
 from tkinter import *
 from random import shuffle, choice
 from PIL import ImageTk, Image
@@ -17,6 +17,7 @@ class App(Tk):
         self.geometry("1248x702")
 
         self.excel_handler = ExcelHandler("slayysaft.xlsx")
+        self.scraper = WebScraper()
         self.configure(
             bg="#000000"
         )
@@ -36,12 +37,12 @@ class App(Tk):
 
     def setup(self):
         self.windows["quiz"] = QuizWindow(self, questions=self.excel_handler.read_questions())
-        self.set_window_by_name("quiz")
         self.windows["failed"] = FailedWindow(self)
-
+        self.set_window_by_name("quiz")
         self.setup_random_features()
 
     def setup_random_features(self):
+        self.scraper.get_github_issues()
         self.bob_image = Image.open("img/byggemand.png")
         self.bob_image = self.bob_image.resize((200, 200), Image.ANTIALIAS)
         self.bob_image = ImageTk.PhotoImage(self.bob_image)
@@ -49,7 +50,7 @@ class App(Tk):
         self.feature_buttons["github"] = Button(
             self,
             image=self.bob_image,
-            command=lambda: self.show_toplevel(choice(get_github_issues()), img="img/byggemand.png"),
+            command=lambda: self.show_toplevel(choice(self.scraper.github_issues), img="img/byggemand.png"),
             bg="#000000",
             borderwidth=0,
         )
