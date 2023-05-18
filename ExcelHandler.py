@@ -2,23 +2,36 @@ import pandas as pd
 
 from Question import Question
 
+class ExcelHandler:
 
-def read_questions(path):
-    questions = []
+    def __init__(self, path):
+        self.path = path
 
-    excel_data = pd.read_excel(path, sheet_name="hva")
+    def read_questions(self):
+        questions = []
 
-    for index, row in excel_data.iterrows():
-        question = Question(
-            prompt=row[0],
-            options=[
-                row[1],
-                row[2],
-                row[3],
-                row[4]
-            ],
-            correct_index=int(row[5]) - 1
-        )
-        questions.append(question)
+        excel_data = pd.read_excel(self.path, sheet_name="hva")
 
-    return questions
+        for index, row in excel_data.iterrows():
+            question = Question(
+                prompt=row[0],
+                options=[
+                    row[1],
+                    row[2],
+                    row[3],
+                    row[4]
+                ],
+                correct_index=int(row[5]) - 1
+            )
+            questions.append(question)
+
+        return questions
+
+
+    def read_drinks(self):
+        alchohols = []
+
+        alko_excel_data = pd.read_excel(self.path, sheet_name="alko")
+
+        for index, row in alko_excel_data.iterrows():
+            pass
