@@ -3,6 +3,7 @@ from App import App
 
 def main():
     app = App()
+    app.setup_windows()
     app.mainloop()
 
 
