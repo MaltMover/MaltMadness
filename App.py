@@ -4,6 +4,7 @@ from WebScraper import get_github_issues
 from tkinter import *
 from random import shuffle, choice
 from PIL import ImageTk, Image
+import playsound
 
 
 class App(Tk):
@@ -36,8 +37,9 @@ class App(Tk):
 
     def setup(self):
         self.windows["quiz"] = QuizWindow(self, questions=self.excel_handler.read_questions())
-        self.set_window_by_name("quiz")
         self.windows["failed"] = FailedWindow(self)
+        self.windows["won"] = WonWindow(self)
+        self.set_window_by_name("quiz")
 
         self.setup_random_features()
 
@@ -118,7 +120,7 @@ class QuizWindow(Window):
     def next_question(self):
         self.current_question_index += 1
         if self.current_question_index >= len(self.questions):
-            self.parent.set_window_by_name("end")
+            self.parent.set_window_by_name("won")
             return
 
         self.current_question = self.questions[self.current_question_index]
@@ -167,6 +169,45 @@ class FailedWindow(Window):
     def hehe_you_thought_lmao(self):
         self.retry_button.configure(text="Du troede du kunne slippe uden at drikke? Vi er danskere der elsker "
                                          "gruppepres :) DRIK!")
+
+def godnat_for_satan():
+    playsound.playsound('img/zzz.mp3')
+
+def godnat_popup():
+    # Failed popup window
+    failed_window = Tk()
+    failed_window.geometry("300x300")
+    failed_window.title("Vil du skride?")
+    failed_window.configure(bg="#992277")
+    Label(failed_window, text="Godnat Daniel", font=('Arial 18 bold')).place(x=50, y=80)
+    Label(failed_window, text="Du skal i skole i morgen", font=("Comic Sans MS", 18)).place(x=1, y=120)
+    Label(failed_window, text="Godnat", font=('Oswald 12 bold')).place(x=0, y=180)
+    Label(failed_window, text="YOU HAVE SCHOOL TOMORROW", font=('Oswald 12')).place(x=70, y=220)
+    Button(failed_window, text="zzzzzzzzzzzzz", command=godnat_for_satan).place(x=50, y=260)
+
+
+class WonWindow(Window):
+    def __init__(self, parent):
+        super().__init__(parent)
+        self.configure(bg="#d4af37")
+        self.drink_image = Image.open("img/DuVandt.png")
+        self.drink_image = self.drink_image.resize((1000, 500), Image.ANTIALIAS)
+        self.drink_image = ImageTk.PhotoImage(self.drink_image)
+
+        self.won_label = Label(self, text="Grattis! Du vann! Du är fortfarande ful", bg="#000000", fg="#ffffff",
+                               font=("Comic Sans MS", 18))
+        self.congrats_button = Button(self, image=self.drink_image)
+        self.godnat_daniel = Button(self, text="Godnat Daniel", command=godnat_popup)
+        self.setup()
+
+    def setup(self):
+        self.won_label.configure(
+            anchor="center",
+            justify="center",
+        )
+        self.won_label.place(x=0, y=0, width=1248, height=100)
+        self.congrats_button.place(x=100, y=150, width=1000, height=500)
+        self.godnat_daniel.place(x=1110, y=130, width=100, height=25)
 
 
 class OptionButton(Button):
