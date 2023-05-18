@@ -16,6 +16,7 @@ class App(Tk):
 
         self.title("MaltMadness")
         self.geometry("1248x702")
+        self.iconbitmap("img/icon.ico")
 
         self.excel_handler = ExcelHandler("slayysaft.xlsx")
         self.scraper = WebScraper()
