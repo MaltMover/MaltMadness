@@ -1,7 +1,8 @@
 from Question import Question
 from ExcelHandler import ExcelHandler
+from WebScraper import get_github_issues
 from tkinter import *
-from random import shuffle
+from random import shuffle, choice
 from PIL import ImageTk, Image
 
 
@@ -9,6 +10,7 @@ class App(Tk):
     def __init__(self):
         super().__init__()
         self.windows = {}
+        self.feature_buttons = {}
         self.current_window: Window | None = None
 
         self.title("MaltMadness")
@@ -32,10 +34,38 @@ class App(Tk):
     def set_window_by_name(self, name: str):
         self.set_window(self.windows[name])
 
-    def setup_windows(self):
+    def setup(self):
         self.windows["quiz"] = QuizWindow(self, questions=self.excel_handler.read_questions())
         self.set_window_by_name("quiz")
         self.windows["failed"] = FailedWindow(self)
+
+        self.setup_random_features()
+
+    def setup_random_features(self):
+        self.bob_image = Image.open("img/byggemand.png")
+        self.bob_image = self.bob_image.resize((200, 200), Image.ANTIALIAS)
+        self.bob_image = ImageTk.PhotoImage(self.bob_image)
+
+        self.feature_buttons["github"] = Button(
+            self,
+            image=self.bob_image,
+            command=lambda: self.show_toplevel(choice(get_github_issues()), img="img/byggemand.png"),
+            bg="#000000",
+            borderwidth=0,
+        )
+        self.feature_buttons["github"].place(x=25, y=100, width=200, height=200)
+
+    def show_toplevel(self, text, img=None):
+        top = Toplevel(self)
+        top.title("MaltMadness")
+        top.geometry("300x300")
+        top.configure(bg="#000000")
+        Label(top, text=text, bg="#000000", fg="#ffffff", font=("Arial", 18), wraplength=280).pack()
+        if img:
+            self.img = Image.open(img)
+            self.img = self.img.resize((200, 200), Image.ANTIALIAS)
+            self.img = ImageTk.PhotoImage(self.img)
+            Label(top, image=self.img, bg="#000000").pack()
 
 
 class Window(Frame):
