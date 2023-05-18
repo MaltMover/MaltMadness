@@ -92,7 +92,7 @@ class App(Tk):
 
         text = choice(self.excel_handler.read_player_disses(id))
 
-        Label(top, text=text, bg="#000000", fg="#ffffff", font=("Arial", 18), wraplength=280).pack()
+        Label(top, text=text, bg="#000000", fg="#ffffff", font=("Arial", 18), wraplength=280, ).pack()
 
     def select_user(self):
         self.select_top = Toplevel(self)
@@ -107,7 +107,7 @@ class App(Tk):
 
         for player in players:
 
-            Button(self.select_top, text=player.name, command=lambda player=player: self.show_fuckdethele(player.id)).pack()
+            Button(self.select_top, text=player.name, command=lambda player=player: self.show_fuckdethele(player.id), bg="#a85832", borderwidth=3, height=4, width=50, padx=2, pady=2).pack()
 
 
 
