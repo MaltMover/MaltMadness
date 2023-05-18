@@ -37,7 +37,7 @@ class ExcelHandler:
         return alcohols
 
     def read_soft_drinks(self):
-        softdrink_excel_data = pd.read_excel(self.path, sheet_name="alko")
+        softdrink_excel_data = pd.read_excel(self.path, sheet_name="sode")
 
         softdrinks = []
         for index, row in softdrink_excel_data.iterrows():
