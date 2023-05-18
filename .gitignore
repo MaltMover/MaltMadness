@@ -8,6 +8,8 @@ __pycache__/
 
 # Get off
 .idea/*
+# Temp xlsx
+~$*
 
 # Distribution / packaging
 .Python
