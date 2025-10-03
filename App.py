@@ -4,7 +4,7 @@ from WebScraper import WebScraper
 from tkinter import *
 from random import shuffle, choice, randint
 from PIL import ImageTk, Image
-import playsound
+import playsound3
 
 
 class App(Tk):
@@ -49,7 +49,7 @@ class App(Tk):
     def setup_random_features(self):
         self.scraper.get_github_issues()
         self.byggemand = Image.open("img/byggemand.png")
-        self.byggemand = self.byggemand.resize((200, 200), Image.ANTIALIAS)
+        self.byggemand = self.byggemand.resize((200, 200))
         self.byggemand = ImageTk.PhotoImage(self.byggemand)
 
         self.feature_buttons["github"] = Button(
@@ -62,7 +62,7 @@ class App(Tk):
         self.feature_buttons["github"].place(x=25, y=100, width=200, height=200)
 
         self.drink_image = Image.open("img/drinks.png")
-        self.drink_image = self.drink_image.resize((200, 200), Image.ANTIALIAS)
+        self.drink_image = self.drink_image.resize((200, 200))
         self.drink_image = ImageTk.PhotoImage(self.drink_image)
 
         self.feature_buttons["drinks"] = Button(
@@ -82,7 +82,7 @@ class App(Tk):
         Label(top, text=text, bg="#000000", fg="#ffffff", font=("Arial", 18), wraplength=280).pack()
         if img:
             self.img = Image.open(img)
-            self.img = self.img.resize((200, 200), Image.ANTIALIAS)
+            self.img = self.img.resize((200, 200))
             self.img = ImageTk.PhotoImage(self.img)
             Label(top, image=self.img, bg="#000000").pack()
 
@@ -95,12 +95,12 @@ class App(Tk):
         top.configure(bg="#000000")
 
         self.img = Image.open("img/wordart.png")
-        self.img = self.img.resize((300, 50), Image.ANTIALIAS)
+        self.img = self.img.resize((300, 50))
         self.img = ImageTk.PhotoImage(self.img)
         Label(top, image=self.img, bg="#000000").pack()
 
         self.img2 = Image.open("img/sodLilFatter.png")
-        self.img2 = self.img2.resize((300, 200), Image.ANTIALIAS)
+        self.img2 = self.img2.resize((300, 200))
         self.img2 = ImageTk.PhotoImage(self.img2)
         Label(top, image=self.img2, bg="#000000").pack()
 
@@ -264,7 +264,7 @@ class FailedWindow(Window):
         self.parent = parent
         self.configure(bg="#341265")
         self.drink_image = Image.open("img/DrikForSatan.png")
-        self.drink_image = self.drink_image.resize((1000, 200), Image.ANTIALIAS)
+        self.drink_image = self.drink_image.resize((1000, 200))
         self.drink_image = ImageTk.PhotoImage(self.drink_image)
 
         self.failed_label = Label(self, text="Du er så dum, men det er okay <3", bg="#000000", fg="#ffffff",
@@ -293,7 +293,7 @@ class FailedWindow(Window):
 
 
 def godnat_for_satan():
-    playsound.playsound('img/zzz.mp3')
+    playsound3.playsound('img/zzz.mp3')
 
 
 def godnat_popup():
@@ -314,7 +314,7 @@ class WonWindow(Window):
         super().__init__(parent)
         self.configure(bg="#d4af37")
         self.drink_image = Image.open("img/DuVandt.png")
-        self.drink_image = self.drink_image.resize((1000, 500), Image.ANTIALIAS)
+        self.drink_image = self.drink_image.resize((1000, 500))
         self.drink_image = ImageTk.PhotoImage(self.drink_image)
 
         self.won_label = Label(self, text="Grattis! Du vann! Du är fortfarande ful", bg="#000000", fg="#ffffff",
